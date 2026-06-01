@@ -1,0 +1,1038 @@
+<!-- START OF FILE text/html (AtCoder Stats) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AtCoder Stats</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* ── Reset & Tokens ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf9f7;
+  --bg2:#f3f1ee;
+  --surface:#ffffff;
+  --border:#e8e4df;
+  --border2:#d4cfc9;
+  --text:#1a1815;
+  --muted:#8c857d;
+  --muted2:#b5afa8;
+  --accent:#d97706;
+  --accent-light:#fef3c7;
+  --accent-hover:#b45309;
+  --green:#059669;
+  --green-light:#d1fae5;
+  --red:#dc2626;
+  --red-light:#fee2e2;
+  --blue:#2563eb;
+  --blue-light:#dbeafe;
+  --radius:10px;
+  --radius-sm:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.08);
+  --transition:.18s ease;
+}
+body{background:var(--bg);color:var(--text);font-family:'Georgia',serif;min-height:100vh;line-height:1.5}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
+
+/* ── Typography helpers ── */
+.mono{font-family:'Courier New',monospace}
+.label-sm{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.label-xs{font-size:.65rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted2)}
+
+/* ── Layout ── */
+.page{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+.page.active{display:flex}
+#loading-screen{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+#app-screen{display:none;flex-direction:column;min-height:100vh}
+#app-screen.active{display:flex}
+
+/* ── Search Screen ── */
+#search-screen{background:var(--bg)}
+.brand{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.brand-icon{width:36px;height:36px;color:var(--accent);flex-shrink:0}
+.brand-name{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;color:var(--text)}
+.brand-name em{font-style:normal;color:var(--accent)}
+.tagline{color:var(--muted);font-size:.9rem;text-align:center;margin-bottom:32px;font-style:italic}
+.search-wrap{width:100%;max-width:420px;display:flex;gap:8px}
+.input-base{flex:1;background:var(--surface);border:1.5px solid var(--border2);color:var(--text);padding:11px 16px;border-radius:var(--radius);font-size:.95rem;outline:none;transition:border-color var(--transition);box-shadow:var(--shadow)}
+.input-base:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light)}
+.input-base::placeholder{color:var(--muted2)}
+.btn{border:none;padding:11px 22px;border-radius:var(--radius);font-size:.9rem;font-weight:700;transition:background var(--transition),transform .1s,box-shadow .1s;letter-spacing:-.01em}
+.btn-primary{background:var(--text);color:var(--bg);box-shadow:var(--shadow)}
+.btn-primary:hover{background:#333;box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border2)}
+.btn-outline:hover{border-color:var(--border2);background:var(--bg2)}
+.btn-sm{padding:7px 14px;font-size:.82rem;border-radius:var(--radius-sm)}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{background:var(--accent-hover)}
+
+/* ── Error / Loading ── */
+#error-msg{color:var(--red);font-size:.88rem;text-align:center;max-width:400px;display:none;line-height:1.6;padding:12px 16px;background:var(--red-light);border-radius:var(--radius);border:1px solid #fca5a5}
+#debug-log{background:var(--bg2);border:1.5px solid var(--border);color:var(--muted);font-size:.74rem;font-family:monospace;padding:10px 14px;border-radius:var(--radius-sm);max-width:420px;width:100%;display:none;white-space:pre-wrap;max-height:110px;overflow-y:auto;margin-top:4px}
+
+/* ── Modern Smooth Spinner ── */
+.spinner-fluid {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+}
+.spinner-fluid::before,
+.spinner-fluid::after {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid transparent;
+}
+.spinner-fluid::before {
+  border-top-color: var(--accent);
+  animation: spin-smooth 1.1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+.spinner-fluid::after {
+  border-bottom-color: var(--text);
+  animation: spin-smooth 1.1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  animation-delay: -0.2s;
+}
+@keyframes spin-smooth {
+  0% { transform: rotate(0deg) scale(0.9); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(0.9); }
+}
+
+.loading-text{color:var(--muted);font-size:.88rem;font-style:italic}
+
+/* ── Topbar ── */
+.topbar{background:var(--surface);border-bottom:1.5px solid var(--border);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:200;box-shadow:var(--shadow)}
+.topbar-left{display:flex;align-items:center;gap:20px}
+.topbar-brand{display:flex;align-items:center;gap:6px;cursor:pointer;transition:opacity var(--transition)}
+.topbar-brand:hover{opacity:.7}
+.topbar-brand .brand-icon{width:24px;height:24px;color:var(--accent);margin-right:2px}
+.topbar-brand .brand-name{font-size:1rem;font-weight:800;letter-spacing:-.03em}
+.nav-tabs{display:flex;gap:2px;background:var(--bg2);border-radius:var(--radius-sm);padding:3px}
+.nav-tab{padding:6px 14px;border-radius:5px;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all var(--transition);border:none;background:transparent;font-family:inherit;letter-spacing:.01em}
+.nav-tab.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+.nav-tab:hover:not(.active){color:var(--text)}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.topbar-input{background:var(--bg2);border:1.5px solid var(--border);color:var(--text);padding:7px 13px;border-radius:var(--radius-sm);font-size:.85rem;outline:none;width:180px;transition:border-color var(--transition)}
+.topbar-input:focus{border-color:var(--accent);background:var(--surface)}
+.topbar-input::placeholder{color:var(--muted2)}
+
+/* ── Content ── */
+.content{max-width:1080px;width:100%;margin:0 auto;padding:28px 20px 60px}
+
+/* ── Profile Header ── */
+.profile-header{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px 28px;display:flex;align-items:center;gap:22px;margin-bottom:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.profile-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent)}
+.avatar{width:68px;height:68px;border-radius:50%;background:var(--bg2);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;flex-shrink:0;font-family:'Georgia',serif}
+.profile-info{flex:1;min-width:0}
+.profile-handle{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;display:flex;align-items:center;gap:9px;margin-bottom:3px;flex-wrap:wrap}
+.rank-badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.profile-sub{color:var(--muted);font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap;margin-top:4px}
+.profile-stats{display:flex;gap:28px;flex-shrink:0}
+.pstat{text-align:center}
+.pstat .val{font-size:1.6rem;font-weight:800;letter-spacing:-.04em;line-height:1}
+.pstat .lbl{font-size:.68rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.06em;font-family:sans-serif}
+@media(max-width:760px){.profile-header{flex-direction:column;align-items:flex-start}.profile-stats{flex-wrap:wrap;gap:16px}}
+
+/* ── Grid ── */
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.grid-2{grid-template-columns:1fr}}
+
+/* ── Cards ── */
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+.card-title{font-size:.82rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pill{background:var(--bg2);color:var(--muted);font-size:.7rem;padding:2px 9px;border-radius:20px;font-weight:600;letter-spacing:.02em;font-family:sans-serif}
+
+/* ── Mini stat cards ── */
+.mini-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 18px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);transition:box-shadow var(--transition)}
+.mini-card:hover{box-shadow:var(--shadow-md)}
+.mini-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.mc-val{font-size:1.25rem;font-weight:800;letter-spacing:-.03em;line-height:1.2}
+.mc-lbl{font-size:.7rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.05em;font-family:sans-serif}
+
+/* ── Chart ── */
+.chart-container{position:relative;height:220px}
+
+/* ── Table ── */
+.data-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.data-table th{text-align:left;padding:8px 12px;font-family:sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted2);border-bottom:1.5px solid var(--border);white-space:nowrap}
+.data-table td{padding:11px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tbody tr{transition:background var(--transition)}
+.data-table tbody tr:hover td{background:var(--bg2)}
+.delta-pos{color:var(--green);font-weight:700;font-family:sans-serif}
+.delta-neg{color:var(--red);font-weight:700;font-family:sans-serif}
+.delta-neu{color:var(--muted);font-weight:700;font-family:sans-serif}
+.perf-tag{display:inline-block;padding:2px 9px;border-radius:4px;font-weight:700;font-size:.82rem;font-family:sans-serif}
+.contest-link{color:var(--text);font-weight:500;transition:color var(--transition)}
+.contest-link:hover{color:var(--accent)}
+
+/* ── Perf Distribution ── */
+.perf-dist-row{display:flex;align-items:center;gap:10px;font-size:.82rem;margin-bottom:6px}
+.perf-dist-row .bar-label{width:96px;font-weight:600;font-size:.74rem;font-family:sans-serif}
+.perf-dist-row .bar-wrap{flex:1;background:var(--bg2);border-radius:3px;height:8px;overflow:hidden;border:1px solid var(--border)}
+.perf-dist-row .bar{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.perf-dist-row .bar-count{width:28px;text-align:right;color:var(--muted);font-size:.74rem;font-family:sans-serif}
+
+/* ═══════════════════════════════════════════
+   PERFORMANCE PAGE
+═══════════════════════════════════════════ */
+#perf-page{display:none}
+#perf-page.active{display:block}
+.perf-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow)}
+.perf-toolbar label{font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-family:sans-serif}
+.select-base{background:var(--bg2);border:1.5px solid var(--border);color:var(--text);padding:6px 12px;border-radius:var(--radius-sm);font-size:.85rem;outline:none;cursor:pointer;font-family:inherit;transition:border-color var(--transition)}
+.select-base:focus{border-color:var(--accent)}
+.toolbar-sep{width:1px;height:24px;background:var(--border2);margin:0 4px}
+.filter-group{display:flex;align-items:center;gap:8px}
+
+/* ── Segmented Control Button Group ── */
+.btn-group {
+  display: flex;
+  background: var(--bg2);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  border: 1.5px solid var(--border);
+}
+.btn-group .btn {
+  padding: 4px 10px;
+  font-size: .78rem;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  box-shadow: none;
+  transition: all var(--transition);
+}
+.btn-group .btn.active {
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 700;
+  box-shadow: var(--shadow);
+}
+.btn-group .btn:hover:not(.active) {
+  color: var(--text);
+  background: rgba(0,0,0,0.02);
+}
+
+/* ── Perf stats row ── */
+.perf-stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:760px){.perf-stats-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.perf-stats-row{grid-template-columns:repeat(2,1fr)}}
+.perf-stat-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.perf-stat-card .val{font-size:1.5rem;font-weight:800;letter-spacing:-.04em}
+.perf-stat-card .lbl{font-size:.68rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.06em;font-family:sans-serif}
+
+/* ── Perf chart grid ── */
+.perf-charts-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:760px){.perf-charts-grid{grid-template-columns:1fr}}
+.perf-chart-container{position:relative;height:240px}
+
+/* ═══════════════════════════════════════════
+   COMPARE PAGE
+═══════════════════════════════════════════ */
+#compare-page{display:none}
+#compare-page.active{display:block}
+.compare-search{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:20px;box-shadow:var(--shadow)}
+.compare-inputs{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.compare-inputs .input-base{width:200px;flex:none;font-size:.88rem;padding:9px 14px}
+.vs-badge{font-weight:800;font-size:.85rem;color:var(--muted);padding:0 4px;font-family:sans-serif}
+.compare-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:0;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:16px}
+.compare-col{padding:20px}
+.compare-col.left{border-right:1px solid var(--border)}
+.compare-divider{width:3px;background:var(--bg2)}
+.compare-col-header{font-size:1rem;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
+.compare-col-sub{font-size:.78rem;color:var(--muted);margin-bottom:16px}
+.compare-metric{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.compare-metric:last-child{border-bottom:none}
+.compare-metric .met-lbl{font-size:.78rem;color:var(--muted);font-family:sans-serif}
+.compare-metric .met-val{font-size:1rem;font-weight:800;letter-spacing:-.02em}
+.compare-winner{color:var(--green)!important}
+.compare-loser{color:var(--muted)!important}
+.compare-chart-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px}
+.compare-chart-container{position:relative;height:260px}
+.compare-status{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;color:var(--muted);font-size:.88rem;font-style:italic}
+
+/* ── Transition animations ── */
+.fade-in{animation:fadeIn .22s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- ────────────── SEARCH SCREEN ────────────── -->
+<div id="search-screen" class="page active">
+  <div class="brand">
+    <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    <div class="brand-name">Atcoder<em>Stats</em></div>
+  </div>
+  <div class="tagline">FACEIT-style analytics for AtCoder competitive programmers</div>
+  <div class="search-wrap">
+    <input class="input-base" id="username-input" type="text" placeholder="Enter AtCoder username…"/>
+    <button class="btn btn-primary" id="search-btn">Search</button>
+  </div>
+  <div id="error-msg" style="margin-top:12px"></div>
+  <div id="debug-log"></div>
+</div>
+
+<!-- ────────────── LOADING ────────────── -->
+<div id="loading-screen">
+  <div class="spinner-fluid"></div>
+  <div class="loading-text" id="loading-detail">Loading stats…</div>
+</div>
+
+<!-- ────────────── APP ────────────── -->
+<div id="app-screen">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-brand" onclick="backToSearch()">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <div class="brand-name">Atcoder<em>Stats</em></div>
+      </div>
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('overview')">Overview</button>
+        <button class="nav-tab" onclick="switchTab('perf')">Performance</button>
+        <button class="nav-tab" onclick="switchTab('compare')">Compare</button>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <input class="topbar-input" id="topbar-input" type="text" placeholder="Search user…"/>
+      <button class="btn btn-primary btn-sm" onclick="loadUserFromTopbar()">Go</button>
+    </div>
+  </div>
+
+  <!-- ── OVERVIEW TAB ── -->
+  <div id="overview-page" class="content fade-in">
+
+    <div class="profile-header" id="profile-header">
+      <div class="avatar" id="avatar-letter"></div>
+      <div class="profile-info">
+        <div class="profile-handle" id="profile-handle"></div>
+        <div class="profile-sub" id="profile-sub"></div>
+      </div>
+      <div class="profile-stats" id="profile-stats"></div>
+    </div>
+
+    <div class="grid-4" id="mini-cards"></div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Rating &amp; Performance History</div>
+        <div class="chart-container"><canvas id="ratingChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Performance Distribution</div>
+        <div id="perf-dist"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        Recent Contest History
+        <span class="pill" id="history-pill"></span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Contest</th><th>Date</th>
+              <th>Rank</th><th>Performance</th><th>New Rating</th><th>Δ</th>
+            </tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PERFORMANCE TAB ── -->
+  <div id="perf-page" class="content">
+
+    <!-- Toolbar -->
+    <div class="perf-toolbar">
+      <div class="filter-group">
+        <label>Recent</label>
+        <select class="select-base" id="perf-n-select" onchange="renderPerfPage()">
+          <option value="10">10 contests</option>
+          <option value="20">20 contests</option>
+          <option value="30">30 contests</option>
+          <option value="50">50 contests</option>
+          <option value="100">100 contests</option>
+          <option value="all" selected>All contests</option>
+        </select>
+      </div>
+      <div class="toolbar-sep"></div>
+      <div class="filter-group">
+        <label>Type</label>
+        <select class="select-base" id="perf-type-select" onchange="renderPerfPage()">
+          <option value="all" selected>All types</option>
+          <option value="abc">ABC (Beginner)</option>
+          <option value="arc">ARC (Regular)</option>
+          <option value="agc">AGC (Grand)</option>
+          <option value="ahc">AHC (Heuristic)</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="toolbar-sep"></div>
+      
+      <!-- Rated / Unrated Switch Button Group -->
+      <div class="filter-group">
+        <label>Rating</label>
+        <div class="btn-group" id="perf-rating-group">
+          <button class="btn btn-sm btn-outline active" data-val="all" onclick="setPerfRatingFilter('all')">All</button>
+          <button class="btn btn-sm btn-outline" data-val="rated" onclick="setPerfRatingFilter('rated')">Rated</button>
+          <button class="btn btn-sm btn-outline" data-val="unrated" onclick="setPerfRatingFilter('unrated')">Unrated</button>
+        </div>
+      </div>
+      <div class="toolbar-sep"></div>
+
+      <div class="filter-group">
+        <label>Sort</label>
+        <select class="select-base" id="perf-sort-select" onchange="renderPerfPage()">
+          <option value="date" selected>By date</option>
+          <option value="perf-desc">Perf ↓</option>
+          <option value="perf-asc">Perf ↑</option>
+        </select>
+      </div>
+      <span class="pill" id="perf-filter-pill" style="margin-left:auto"></span>
+    </div>
+
+    <!-- Stat row -->
+    <div class="perf-stats-row" id="perf-stats-row"></div>
+
+    <!-- Charts -->
+    <div class="perf-charts-grid">
+      <div class="card">
+        <div class="card-title">Performance Over Time</div>
+        <div class="perf-chart-container"><canvas id="perfLineChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Distribution by Tier</div>
+        <div class="perf-chart-container"><canvas id="perfBarChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card">
+      <div class="card-title">Contest Breakdown <span class="pill" id="perf-table-pill"></span></div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr><th>#</th><th>Contest</th><th>Date</th><th>Type</th><th>Rank</th><th>Performance</th><th>Rating After</th><th>Δ</th></tr>
+          </thead>
+          <tbody id="perf-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COMPARE TAB ── -->
+  <div id="compare-page" class="content">
+
+    <div class="compare-search">
+      <div class="card-title" style="margin-bottom:8px">Compare Users</div>
+      <div class="compare-inputs">
+        <input class="input-base" id="compare-user1" type="text" placeholder="User 1 (current)" style="width:200px;flex:none;font-size:.88rem;padding:9px 14px"/>
+        <span class="vs-badge">vs</span>
+        <input class="input-base" id="compare-user2" type="text" placeholder="User 2…" style="width:200px;flex:none;font-size:.88rem;padding:9px 14px"/>
+        <button class="btn btn-primary btn-sm" onclick="runCompare()">Compare</button>
+      </div>
+      <div id="compare-error" style="display:none;color:var(--red);font-size:.82rem;margin-top:8px;font-family:sans-serif"></div>
+    </div>
+
+    <div id="compare-content">
+      <div class="compare-status">Enter two usernames above to compare their statistics.</div>
+    </div>
+  </div>
+
+</div><!-- /app-screen -->
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   CONSTANTS & GLOBALS
+═══════════════════════════════════════════════════════ */
+const TIERS=[
+  {min:2800,label:'Red',    color:'#dc2626',bg:'#fee2e2'},
+  {min:2400,label:'Orange', color:'#d97706',bg:'#fef3c7'},
+  {min:2000,label:'Yellow', color:'#a16207',bg:'#fefce8'},
+  {min:1600,label:'Blue',   color:'#2563eb',bg:'#dbeafe'},
+  {min:1200,label:'Cyan',   color:'#0891b2',bg:'#cffafe'},
+  {min: 800,label:'Green',  color:'#059669',bg:'#d1fae5'},
+  {min: 400,label:'Brown',  color:'#92400e',bg:'#fef3c7'},
+  {min:   0,label:'Gray',   color:'#6b7280',bg:'#f3f4f6'},
+];
+function getTier(r){for(const t of TIERS)if(r>=t.min)return t;return TIERS[TIERS.length-1]}
+
+const PROXIES=[
+  {name:'corsproxy.io',    build:u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,    parse:async r=>r.json()},
+  {name:'allorigins.win',  build:u=>`https://api.allorigins.win/get?url=${encodeURIComponent(u)}`, parse:async r=>{const j=await r.json();return JSON.parse(j.contents)}},
+  {name:'codetabs.com',    build:u=>`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,parse:async r=>r.json()},
+];
+
+const $=id=>document.getElementById(id);
+let globalHistory=[], globalUsername='';
+let ratingChartInst=null, perfLineInst=null, perfBarInst=null, compareChartInst=null;
+let compareData={};
+let perfRatingFilter='all'; // Add rated/unrated filter state
+
+/* ── Help Format Contest Names (Remove .contest.atcoder.jp, etc.) ── */
+function formatContestName(screenName) {
+  if (!screenName) return '';
+  return screenName.replace(/\.contest\.atcoder\.jp$/i, '').replace(/\.atcoder\.jp$/i, '');
+}
+
+/* ── Proxy fetch ── */
+async function fetchWithFallback(targetUrl){
+  const dbg=$('debug-log');
+  for(const p of PROXIES){
+    dbg.textContent+=`Trying ${p.name}…\n`;
+    try{
+      const res=await fetch(p.build(targetUrl),{signal:AbortSignal.timeout(8000)});
+      if(!res.ok)continue;
+      const data=await p.parse(res);
+      dbg.textContent+=`✓ OK via ${p.name}\n`;
+      return data;
+    }catch(e){dbg.textContent+=`✗ ${e.message}\n`}
+  }
+  throw new Error('All proxies failed');
+}
+
+/* ── Navigation ── */
+function show(id,d='flex'){$(id).style.display=d}
+function hide(id){$(id).style.display='none'}
+
+function backToSearch(){
+  hide('app-screen');
+  $('app-screen').classList.remove('active');
+  $('search-screen').classList.add('active');
+}
+
+function switchTab(tab){
+  ['overview-page','perf-page','compare-page'].forEach(p=>$('#'+p,document.getElementById('app-screen'))&&($('#'+p).className.replace('active','').trim()));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  
+  const pages={overview:'overview-page',perf:'perf-page',compare:'compare-page'};
+  Object.entries(pages).forEach(([k,v])=>{
+    const el=document.getElementById(v);
+    if(k===tab){el.style.display='block';el.classList.add('fade-in')}
+    else el.style.display='none';
+  });
+  document.querySelectorAll('.nav-tab').forEach(t=>{
+    if(t.textContent.toLowerCase().startsWith(tab))t.classList.add('active');
+  });
+  if(tab==='perf')renderPerfPage();
+  if(tab==='compare')setupCompareDefaults();
+}
+
+function setupCompareDefaults(){
+  if(globalUsername&&!$('compare-user1').value)
+    $('compare-user1').value=globalUsername;
+}
+
+/* ── Load user ── */
+async function loadUser(usernameArg){
+  const username=(usernameArg||$('username-input').value.trim());
+  if(!username)return;
+  const dbg=$('debug-log');
+  dbg.style.display='none'; dbg.textContent='';
+  $('error-msg').style.display='none';
+
+  $('search-screen').classList.remove('active');
+  hide('loading-screen');hide('app-screen');
+  $('app-screen').classList.remove('active');
+  $('loading-screen').style.display='flex';
+  $('loading-detail').textContent=`Fetching data for ${username}…`;
+
+  try{
+    const url=`https://atcoder.jp/users/${encodeURIComponent(username)}/history/json`;
+    dbg.style.display='block';
+    const history=await fetchWithFallback(url);
+    if(!Array.isArray(history)||history.length===0)throw new Error('No rated contest history found.');
+
+    globalHistory=history.sort((a,b)=>new Date(a.EndTime)-new Date(b.EndTime));
+    globalUsername=username;
+
+    renderOverview(username,globalHistory);
+    renderPerfPage();
+
+    hide('loading-screen');
+    $('app-screen').style.display='flex';
+    $('app-screen').classList.add('active');
+    $('topbar-input').value='';
+    switchTab('overview');
+    $('compare-user1').value=username;
+  }catch(e){
+    hide('loading-screen');
+    $('search-screen').classList.add('active');
+    const err=$('error-msg');
+    err.style.display='block';
+    err.textContent=`⚠ ${e.message}`;
+    dbg.style.display='block';
+  }
+}
+
+function loadUserFromTopbar(){
+  const u=$('topbar-input').value.trim();
+  if(u)loadUser(u);
+}
+
+$('search-btn').addEventListener('click',()=>loadUser());
+$('username-input').addEventListener('keydown',e=>{if(e.key==='Enter')loadUser()});
+$('topbar-input').addEventListener('keydown',e=>{if(e.key==='Enter')loadUserFromTopbar()});
+
+/* ═══════════════════════════════════════════════════════
+   OVERVIEW TAB
+═══════════════════════════════════════════════════════ */
+function renderOverview(username,history){
+  const ratings=history.map(h=>h.NewRating);
+  const perfs=history.map(h=>h.Performance);
+  const last=history[history.length-1], first=history[0];
+  const currentRating=last.NewRating, maxRating=Math.max(...ratings);
+  const avgPerf=Math.round(perfs.reduce((a,b)=>a+b,0)/perfs.length);
+  const totalContests=history.length;
+  const tier=getTier(currentRating), maxTier=getTier(maxRating);
+
+  // Avatar
+  const av=$('avatar-letter');
+  av.textContent=username[0].toUpperCase();
+  av.style.color=tier.color;
+  av.style.borderColor=tier.color;
+
+  // Handle
+  $('profile-handle').innerHTML=
+    `<span style="color:${tier.color}">${username}</span>`+
+    `<span class="rank-badge" style="background:${tier.bg};color:${tier.color}">${tier.label}</span>`;
+
+  const since=new Date(first.EndTime).toLocaleDateString('en-US',{year:'numeric',month:'short'});
+  $('profile-sub').innerHTML=
+    `<span>🏆 ${totalContests} rated contests</span><span>📅 Since ${since}</span>`;
+
+  $('profile-stats').innerHTML=`
+    <div class="pstat"><div class="val" style="color:${tier.color}">${currentRating}</div><div class="lbl">Current Rating</div></div>
+    <div class="pstat"><div class="val" style="color:${maxTier.color}">${maxRating}</div><div class="lbl">Peak Rating</div></div>
+    <div class="pstat"><div class="val">${avgPerf}</div><div class="lbl">Avg Performance</div></div>`;
+
+  // Mini cards
+  const posRate=Math.round(history.filter(h=>h.Performance>=currentRating).length/totalContests*100);
+  const lastDelta=last.NewRating-last.OldRating;
+  let maxStreak=0,cur=0;
+  for(let i=1;i<history.length;i++){
+    if(history[i].NewRating>history[i-1].NewRating){cur++;maxStreak=Math.max(maxStreak,cur)}else cur=0;
+  }
+  let curStreakNow=0;
+  for(let i=history.length-1;i>=1;i--){
+    if(history[i].NewRating>history[i-1].NewRating)curStreakNow++;else break;
+  }
+  const bestPerf=Math.max(...perfs), worstPerf=Math.min(...perfs);
+
+  $('mini-cards').innerHTML=`
+    <div class="mini-card"><div class="mini-icon" style="background:var(--bg2)">⚡</div><div><div class="mc-val">${avgPerf}</div><div class="mc-lbl">Avg Perf</div></div></div>
+    <div class="mini-card"><div class="mini-icon" style="background:var(--green-light)">📈</div><div><div class="mc-val" style="color:var(--green)">${posRate}%</div><div class="mc-lbl">Above-rating perf</div></div></div>
+    <div class="mini-card"><div class="mini-icon" style="background:var(--accent-light)">🔥</div><div><div class="mc-val">${curStreakNow}<span style="color:var(--muted);font-weight:400;font-size:.9rem"> / ${maxStreak}</span></div><div class="mc-lbl">Streak (cur/best)</div></div></div>
+    <div class="mini-card"><div class="mini-icon" style="background:${lastDelta>=0?'var(--green-light)':'var(--red-light)'}">${lastDelta>=0?'▲':'▼'}</div><div><div class="mc-val" style="color:${lastDelta>=0?'var(--green)':'var(--red)'}">${lastDelta>=0?'+':''}${lastDelta}</div><div class="mc-lbl">Last Δ Rating</div></div></div>`;
+
+  // Rating chart
+  if(ratingChartInst)ratingChartInst.destroy();
+  const labels=history.map(h=>new Date(h.EndTime).toLocaleDateString('en-US',{month:'short',day:'numeric'}));
+  const ctx=$('ratingChart').getContext('2d');
+  const grad=ctx.createLinearGradient(0,0,0,220);
+  grad.addColorStop(0,tier.color+'30');grad.addColorStop(1,tier.color+'00');
+  ratingChartInst=new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Rating',data:ratings,borderColor:tier.color,backgroundColor:grad,borderWidth:2,
+       pointRadius:history.length>40?0:3,pointHoverRadius:5,tension:0.3,fill:true,order:1},
+      {label:'Perf',data:perfs,borderColor:'#d9770660',backgroundColor:'transparent',
+       borderWidth:1.5,pointRadius:0,borderDash:[4,4],tension:0.3,order:2}
+    ]},
+    options:chartOpts(['Rating','Perf'])
+  });
+
+  // Perf distribution
+  const perfBuckets=[
+    {label:'Red 2800+',min:2800,color:'#dc2626'},
+    {label:'Orange 2400',min:2400,color:'#d97706'},
+    {label:'Yellow 2000',min:2000,color:'#a16207'},
+    {label:'Blue 1600',min:1600,color:'#2563eb'},
+    {label:'Cyan 1200',min:1200,color:'#0891b2'},
+    {label:'Green 800',min:800,color:'#059669'},
+    {label:'Brown 400',min:400,color:'#92400e'},
+    {label:'Gray 0',min:0,color:'#6b7280'},
+  ];
+  const counts=perfBuckets.map((b,i)=>{
+    const nextMin=i>0?perfBuckets[i-1].min:Infinity;
+    return perfs.filter(p=>p>=b.min&&p<nextMin).length;
+  });
+  const maxCount=Math.max(1,...counts);
+  $('perf-dist').innerHTML=perfBuckets.map((b,i)=>`
+    <div class="perf-dist-row">
+      <div class="bar-label" style="color:${b.color}">${b.label}</div>
+      <div class="bar-wrap"><div class="bar" style="width:${Math.round(counts[i]/maxCount*100)}%;background:${b.color}"></div></div>
+      <div class="bar-count">${counts[i]}</div>
+    </div>`).join('');
+
+  // History table
+  $('history-pill').textContent=`Last ${Math.min(20,totalContests)} of ${totalContests}`;
+  const tbody=$('history-body');tbody.innerHTML='';
+  [...history].reverse().slice(0,20).forEach((h,i)=>{
+    const delta=h.NewRating-h.OldRating;
+    const pt=getTier(h.Performance);
+    const date=new Date(h.EndTime).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+    const cleanName = formatContestName(h.ContestScreenName);
+    tbody.innerHTML+=`<tr>
+      <td style="color:var(--muted);font-size:.8rem;font-family:sans-serif">${totalContests-i}</td>
+      <td><a class="contest-link" href="https://atcoder.jp/contests/${cleanName}" target="_blank">${cleanName}</a></td>
+      <td style="color:var(--muted);font-size:.82rem;font-family:sans-serif">${date}</td>
+      <td style="font-weight:600;font-family:sans-serif">#${h.Place}</td>
+      <td><span class="perf-tag" style="background:${pt.bg};color:${pt.color}">${h.Performance}</span></td>
+      <td style="color:${getTier(h.NewRating).color};font-weight:700;font-family:sans-serif">${h.NewRating}</td>
+      <td class="${delta>0?'delta-pos':delta<0?'delta-neg':'delta-neu'}">${delta>0?'+':''}${delta}</td>
+    </tr>`;
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   PERFORMANCE TAB
+═══════════════════════════════════════════════════════ */
+function getContestType(name){
+  const n=formatContestName(name).toLowerCase();
+  if(/^abc/.test(n))return'abc';
+  if(/^arc/.test(n))return'arc';
+  if(/^agc/.test(n))return'agc';
+  if(/^ahc/.test(n))return'ahc';
+  return'other';
+}
+const TYPE_LABELS={abc:'ABC',arc:'ARC',agc:'AGC',ahc:'AHC',other:'Other'};
+const TYPE_COLORS={abc:'#2563eb',arc:'#d97706',agc:'#dc2626',ahc:'#059669',other:'#6b7280'};
+
+function setPerfRatingFilter(val) {
+  perfRatingFilter = val;
+  const buttons = document.querySelectorAll('#perf-rating-group .btn');
+  buttons.forEach(btn => {
+    if (btn.getAttribute('data-val') === val) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  renderPerfPage();
+}
+
+function renderPerfPage(){
+  if(!globalHistory.length)return;
+  const nSel=$('perf-n-select').value;
+  const typeSel=$('perf-type-select').value;
+  const sortSel=$('perf-sort-select').value;
+
+  // Filter by type
+  let filtered=globalHistory.filter(h=>typeSel==='all'||getContestType(h.ContestScreenName)===typeSel);
+  
+  // Filter by rated status
+  if (perfRatingFilter === 'rated') {
+    filtered = filtered.filter(h => h.IsRated === true);
+  } else if (perfRatingFilter === 'unrated') {
+    filtered = filtered.filter(h => h.IsRated === false);
+  }
+
+  // Filter by N
+  if(nSel!=='all')filtered=filtered.slice(-parseInt(nSel));
+  // Sort
+  let sorted=[...filtered];
+  if(sortSel==='perf-desc')sorted.sort((a,b)=>b.Performance-a.Performance);
+  else if(sortSel==='perf-asc')sorted.sort((a,b)=>a.Performance-b.Performance);
+
+  $('perf-filter-pill').textContent=`${sorted.length} contests`;
+
+  // Stats
+  if(!sorted.length){
+    $('perf-stats-row').innerHTML='<div style="color:var(--muted);font-size:.88rem;font-style:italic;padding:8px">No contests match this filter.</div>';
+    return;
+  }
+  const perfs=sorted.map(h=>h.Performance);
+  const avg=Math.round(perfs.reduce((a,b)=>a+b,0)/perfs.length);
+  const best=Math.max(...perfs), worst=Math.min(...perfs);
+  const median=[...perfs].sort((a,b)=>a-b)[Math.floor(perfs.length/2)];
+  const stdDev=Math.round(Math.sqrt(perfs.map(p=>(p-avg)**2).reduce((a,b)=>a+b,0)/perfs.length));
+  const above=sorted.filter(h=>h.Performance>h.OldRating).length;
+  const abovePct=Math.round(above/sorted.length*100);
+
+  $('perf-stats-row').innerHTML=`
+    <div class="perf-stat-card"><div class="val">${avg}</div><div class="lbl">Average</div></div>
+    <div class="perf-stat-card"><div class="val" style="color:var(--green)">${best}</div><div class="lbl">Best</div></div>
+    <div class="perf-stat-card"><div class="val" style="color:var(--red)">${worst}</div><div class="lbl">Worst</div></div>
+    <div class="perf-stat-card"><div class="val">${median}</div><div class="lbl">Median</div></div>
+    <div class="perf-stat-card"><div class="val" style="color:${abovePct>=50?'var(--green)':'var(--red)'}">${abovePct}%</div><div class="lbl">Positive Δ</div></div>`;
+
+  // Line chart (by date order)
+  const byDate=[...filtered]; // original date order
+  const lineLabels=byDate.map(h=>new Date(h.EndTime).toLocaleDateString('en-US',{month:'short',day:'numeric'}));
+  const linePerfs=byDate.map(h=>h.Performance);
+  const avgLine=new Array(linePerfs.length).fill(avg);
+
+  if(perfLineInst)perfLineInst.destroy();
+  const lctx=$('perfLineChart').getContext('2d');
+  const lgrad=lctx.createLinearGradient(0,0,0,240);
+  lgrad.addColorStop(0,'#d9770630');lgrad.addColorStop(1,'#d9770600');
+  perfLineInst=new Chart(lctx,{
+    type:'line',
+    data:{labels:lineLabels,datasets:[
+      {label:'Performance',data:linePerfs,borderColor:'#d97706',backgroundColor:lgrad,borderWidth:2,
+       pointRadius:linePerfs.length>40?0:3,pointHoverRadius:5,tension:0.3,fill:true},
+      {label:'Avg',data:avgLine,borderColor:'#6b728066',borderWidth:1.5,pointRadius:0,borderDash:[5,5],fill:false}
+    ]},
+    options:chartOpts(['Performance','Avg'])
+  });
+
+  // Bar chart by tier
+  const buckets=TIERS.map((t,i)=>{
+    const nextMin=i>0?TIERS[i-1].min:Infinity;
+    return{label:t.label,color:t.color,bg:t.bg,count:perfs.filter(p=>p>=t.min&&p<nextMin).length};
+  }).filter(b=>b.count>0);
+
+  if(perfBarInst)perfBarInst.destroy();
+  const bctx=$('perfBarChart').getContext('2d');
+  perfBarInst=new Chart(bctx,{
+    type:'bar',
+    data:{
+      labels:buckets.map(b=>b.label),
+      datasets:[{
+        label:'Contests',
+        data:buckets.map(b=>b.count),
+        backgroundColor:buckets.map(b=>b.color+'cc'),
+        borderColor:buckets.map(b=>b.color),
+        borderWidth:1.5,borderRadius:4
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw} contest${c.raw!==1?'s':''}`}}},
+      scales:{
+        x:{ticks:{color:'#8c857d',font:{size:10,family:'sans-serif'}},grid:{display:false}},
+        y:{ticks:{color:'#8c857d',font:{size:10,family:'sans-serif'},stepSize:1},grid:{color:'#e8e4df88'}}
+      }
+    }
+  });
+
+  // Table
+  $('perf-table-pill').textContent=`${sorted.length} rows`;
+  const tbody=$('perf-table-body');tbody.innerHTML='';
+  sorted.forEach((h,i)=>{
+    const delta=h.NewRating-h.OldRating;
+    const pt=getTier(h.Performance);
+    const type=getContestType(h.ContestScreenName);
+    const date=new Date(h.EndTime).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+    const cleanName = formatContestName(h.ContestScreenName);
+    tbody.innerHTML+=`<tr>
+      <td style="color:var(--muted);font-size:.8rem;font-family:sans-serif">${i+1}</td>
+      <td><a class="contest-link" href="https://atcoder.jp/contests/${cleanName}" target="_blank">${cleanName}</a></td>
+      <td style="color:var(--muted);font-size:.82rem;font-family:sans-serif">${date}</td>
+      <td><span class="perf-tag" style="background:${TYPE_COLORS[type]}18;color:${TYPE_COLORS[type]}">${TYPE_LABELS[type]}</span></td>
+      <td style="font-weight:600;font-family:sans-serif">#${h.Place}</td>
+      <td><span class="perf-tag" style="background:${pt.bg};color:${pt.color}">${h.Performance}</span></td>
+      <td style="color:${getTier(h.NewRating).color};font-weight:700;font-family:sans-serif">${h.NewRating}</td>
+      <td class="${delta>0?'delta-pos':delta<0?'delta-neg':'delta-neu'}">${delta>0?'+':''}${delta}</td>
+    </tr>`;
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   COMPARE TAB
+═══════════════════════════════════════════════════════ */
+async function runCompare(){
+  const u1=($('compare-user1').value||'').trim();
+  const u2=($('compare-user2').value||'').trim();
+  const errEl=$('compare-error');
+  errEl.style.display='none';
+
+  if(!u1||!u2){errEl.style.display='block';errEl.textContent='Please enter two usernames.';return}
+
+  const content=$('compare-content');
+  content.innerHTML='<div class="compare-status"><div class="spinner-fluid" style="margin:0 auto 12px"></div>Loading comparison…</div>';
+
+  async function fetchHistory(user){
+    // use cached if available
+    if(compareData[user])return compareData[user];
+    if(user===globalUsername&&globalHistory.length){compareData[user]=globalHistory;return globalHistory}
+    const url=`https://atcoder.jp/users/${encodeURIComponent(user)}/history/json`;
+    const h=await fetchWithFallback(url);
+    if(!Array.isArray(h)||!h.length)throw new Error(`No history for ${user}`);
+    compareData[user]=h.sort((a,b)=>new Date(a.EndTime)-new Date(b.EndTime));
+    return compareData[user];
+  }
+
+  try{
+    const [h1,h2]=await Promise.all([fetchHistory(u1),fetchHistory(u2)]);
+    renderCompare(u1,h1,u2,h2);
+  }catch(e){
+    content.innerHTML='<div class="compare-status">Failed to load data. Check usernames.</div>';
+    errEl.style.display='block';errEl.textContent=e.message;
+  }
+}
+
+$('compare-user2').addEventListener('keydown',e=>{if(e.key==='Enter')runCompare()});
+
+function calcStats(history){
+  const ratings=history.map(h=>h.NewRating);
+  const perfs=history.map(h=>h.Performance);
+  const last=history[history.length-1];
+  const avg=Math.round(perfs.reduce((a,b)=>a+b,0)/perfs.length);
+  const best=Math.max(...perfs);
+  const maxR=Math.max(...ratings);
+  let maxStr=0,cur=0;
+  for(let i=1;i<history.length;i++){
+    if(history[i].NewRating>history[i-1].NewRating){cur++;maxStr=Math.max(maxStr,cur)}else cur=0;
+  }
+  const posRate=Math.round(history.filter(h=>h.Performance>h.OldRating).length/history.length*100);
+  return{currentRating:last.NewRating,maxRating:maxR,avgPerf:avg,bestPerf:best,
+         contests:history.length,maxStreak:maxStr,posRate};
+}
+
+function renderCompare(u1,h1,u2,h2){
+  const s1=calcStats(h1), s2=calcStats(h2);
+  const t1=getTier(s1.currentRating), t2=getTier(s2.currentRating);
+
+  const metrics=[
+    {label:'Current Rating',k:'currentRating',higher:true},
+    {label:'Peak Rating',k:'maxRating',higher:true},
+    {label:'Avg Performance',k:'avgPerf',higher:true},
+    {label:'Best Performance',k:'bestPerf',higher:true},
+    {label:'Contests',k:'contests',higher:true},
+    {label:'Max Win Streak',k:'maxStreak',higher:true},
+    {label:'Positive Δ Rate',k:'posRate',higher:true,fmt:v=>v+'%'},
+  ];
+
+  function fmt(v,m){return m.fmt?m.fmt(v):v.toLocaleString()}
+  function cls(v1,v2,higher){
+    if(v1===v2)return['',''];
+    return higher===true
+      ?(v1>v2?['compare-winner','compare-loser']:['compare-loser','compare-winner'])
+      :(v1<v2?['compare-winner','compare-loser']:['compare-loser','compare-winner']);
+  }
+
+  const mRows=metrics.map(m=>{
+    const[c1,c2]=cls(s1[m.k],s2[m.k],m.higher);
+    return`<div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;border-bottom:1px solid var(--border);padding:10px 0">
+      <div style="font-weight:800;font-size:1rem;letter-spacing:-.02em" class="${c1}">${fmt(s1[m.k],m)}</div>
+      <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-family:sans-serif;padding:0 16px;display:flex;align-items:center">${m.label}</div>
+      <div style="font-weight:800;font-size:1rem;letter-spacing:-.02em;text-align:right" class="${c2}">${fmt(s2[m.k],m)}</div>
+    </div>`;
+  }).join('');
+
+  // Overlay chart — find common contests
+  const all1=new Set(h1.map(h=>h.ContestScreenName));
+  const all2=new Set(h2.map(h=>h.ContestScreenName));
+  const common=[...all1].filter(c=>all2.has(c)).sort();
+
+  let commonChartHTML='';
+  if(common.length>=2){
+    const pts1=common.map(c=>{const h=h1.find(x=>x.ContestScreenName===c);return h?h.Performance:null}).filter(Boolean);
+    const pts2=common.map(c=>{const h=h2.find(x=>x.ContestScreenName===c);return h?h.Performance:null}).filter(Boolean);
+    const labelsC=common.map(c=>formatContestName(c).replace(/^(abc|arc|agc|ahc)/i,'$1 ').replace('_','.'));
+    commonChartHTML=`
+    <div class="compare-chart-wrap">
+      <div class="card-title">Performance on Common Contests <span class="pill">${common.length} shared</span></div>
+      <div class="compare-chart-container"><canvas id="compareLineChart"></canvas></div>
+    </div>`;
+    // render after insert
+    setTimeout(()=>{
+      if(compareChartInst)compareChartInst.destroy();
+      const ctx=document.getElementById('compareLineChart').getContext('2d');
+      compareChartInst=new Chart(ctx,{
+        type:'line',
+        data:{labels:labelsC,datasets:[
+          {label:u1,data:pts1,borderColor:t1.color,backgroundColor:t1.color+'20',borderWidth:2,pointRadius:3,tension:0.3,fill:true},
+          {label:u2,data:pts2,borderColor:t2.color,backgroundColor:t2.color+'20',borderWidth:2,pointRadius:3,tension:0.3,fill:true}
+        ]},
+        options:chartOpts([u1,u2])
+      });
+    },50);
+  }
+
+  // Rating history chart
+  const ratingHistHTML=`
+  <div class="compare-chart-wrap">
+    <div class="card-title">Rating History</div>
+    <div class="compare-chart-container"><canvas id="compareRatingChart"></canvas></div>
+  </div>`;
+
+  $('compare-content').innerHTML=`
+    <div class="compare-chart-wrap" style="margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-bottom:16px">
+        <div>
+          <div style="font-size:1.4rem;font-weight:800;letter-spacing:-.03em;color:${t1.color}">${u1}</div>
+          <span class="rank-badge" style="background:${t1.bg};color:${t1.color}">${t1.label}</span>
+        </div>
+        <div style="font-size:1.2rem;font-weight:800;color:var(--muted2);padding:0 20px;display:flex;align-items:center">vs</div>
+        <div style="text-align:right">
+          <div style="font-size:1.4rem;font-weight:800;letter-spacing:-.03em;color:${t2.color}">${u2}</div>
+          <span class="rank-badge" style="background:${t2.bg};color:${t2.color}">${t2.label}</span>
+        </div>
+      </div>
+      ${mRows}
+    </div>
+    ${ratingHistHTML}
+    ${commonChartHTML}
+  `;
+
+  // Rating history overlay
+  setTimeout(()=>{
+    const rctx=document.getElementById('compareRatingChart').getContext('2d');
+    const labels1=h1.map(h=>new Date(h.EndTime).toLocaleDateString('en-US',{month:'short',year:'2-digit'}));
+    const labels2=h2.map(h=>new Date(h.EndTime).toLocaleDateString('en-US',{month:'short',year:'2-digit'}));
+    const maxLen=Math.max(h1.length,h2.length);
+    const pad=(arr,len)=>[...new Array(len-arr.length).fill(null),...arr];
+    new Chart(rctx,{
+      type:'line',
+      data:{
+        labels:Array.from({length:maxLen},(_,i)=>i===0||i===maxLen-1?'':i),
+        datasets:[
+          {label:u1,data:pad(h1.map(h=>h.NewRating),maxLen),borderColor:t1.color,borderWidth:2,
+           pointRadius:0,tension:0.3,fill:false,spanGaps:true},
+          {label:u2,data:pad(h2.map(h=>h.NewRating),maxLen),borderColor:t2.color,borderWidth:2,
+           pointRadius:0,tension:0.3,fill:false,spanGaps:true}
+        ]
+      },
+      options:{...chartOpts([u1,u2]),scales:{
+        x:{display:false,grid:{display:false}},
+        y:{ticks:{color:'#8c857d',font:{size:10,family:'sans-serif'}},grid:{color:'#e8e4df66'}}
+      }}
+    });
+  },50);
+}
+
+/* ── Shared chart options ── */
+function chartOpts(legendLabels){
+  return{
+    responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{labels:{color:'#8c857d',font:{size:10,family:'sans-serif'},boxWidth:16,padding:12}},
+      tooltip:{backgroundColor:'#ffffff',borderColor:'#e8e4df',borderWidth:1.5,
+               titleColor:'#1a1815',bodyColor:'#8c857d',
+               padding:10,cornerRadius:8,
+               titleFont:{family:'Georgia',size:12},bodyFont:{family:'sans-serif',size:11}}
+    },
+    scales:{
+      x:{ticks:{color:'#8c857d',maxTicksLimit:8,font:{size:10,family:'sans-serif'}},grid:{color:'#e8e4df55'}},
+      y:{ticks:{color:'#8c857d',font:{size:10,family:'sans-serif'}},grid:{color:'#e8e4df55'}}
+    }
+  };
+}
+</script>
+</body>
+</html>
+<!-- END OF FILE text/html (AtCoder Stats) -->
